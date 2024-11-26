@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="style.css">
+        <title>Middlesex University Dubai Courses</title>
+    </head>
+    <body>
+        <div id="app">
+            <header>
+                <h1 v-text="sitename"></h1>
+            </header>
+            <div class="checkout">
+              <button v-on:click="checkout">Checkout</button>
+            </div>
+            <main>
+                <div v-for="club in clubs" :key="club.id" class="club">
+                    <figure>
+                      <img :src="club.image" :alt="club.title" />
+                    </figure>
+                    <h2 v-text="club.title"></h2>
+                    <p v-text="club.description"></p>
+                    <p>Location: {{ club.location }}</p>
+                    <p>Availability: {{ club.availability }}</p>
+                    <p>Price: {{ club.price }}</p>
+                    <button v-on:click="addToCart(club)">Add to Cart</button>
+                </div>
+                
+            </main>
+        </div>
+
+
+        <script type="text/javascript">
+            var webstore = new Vue({
+                el: '#app',
+                data: {
+                  sitename: "Middlesex University Dubai Social Clubs",
+                  clubs: [
+                    {
+                      id: 1001,
+                      title: "Book Club",
+                      description:
+                        "Members of the Book Club encourage others to either find or rekindle their love of reading by forming reading groups whereby students can discuss their thoughts and gain new perspectives on both modern and classical literary works.",
+                      location: "Block 15",
+                      availability: 30,
+                      price: "1900",
+                      image: "images/bookClub.jpeg",
+                    },
+                    {
+                      id: 1002,
+                      title: "Dance Club",
+                      description:
+                        "Based in the purpose built Dance Studio in HUB19, members of the Dance Club come together to learn a wide range of dance genres such as jazz, afro-fusion, contemporary, breakdance and hip hop. Dance is a fantastic way for students to get fit and healthy and the Dance Club regularly perform in competitions across the region. ",
+                      location: "Block 19",
+                      availability: 25,
+                      price: "2500",
+                      image: "images/danceClub.jpeg",
+                    },
+                    {
+                      id: 1003,
+                      title: "Fearless Public Speaking Club",
+                      description:
+                        "Club Fearless seeks to help students boost their self-confidence and public speaking skills with weekly debates and public speaking training sessions happening frequently throughout the year. The club celebrates all possible art forms which encourage freedom of speech and self-expression.",
+                      location: "Block 19",
+                      availability: 15,
+                      price: "2000",
+                      image: "images/speakingClub.jpeg",
+                    },
+                    {
+                      id: 1004,
+                      title: "Fearless Public Speaking Club",
+                      description:
+                        "Club Fearless seeks to help students boost their self-confidence and public speaking skills with weekly debates and public speaking training sessions happening frequently throughout the year. The club celebrates all possible art forms which encourage freedom of speech and self-expression.",
+                      location: "Block 19",
+                      availability: 15,
+                      price: "2000",
+                      image: "images/speakingClub.jpeg",
+                    },
+                    {
+                      id: 1005,
+                      title: "Fearless Public Speaking Club",
+                      description:
+                        "Club Fearless seeks to help students boost their self-confidence and public speaking skills with weekly debates and public speaking training sessions happening frequently throughout the year. The club celebrates all possible art forms which encourage freedom of speech and self-expression.",
+                      location: "Block 19",
+                      availability: 15,
+                      price: "2000",
+                      image: "images/speakingClub.jpeg",
+                    },
+                    {
+                      id: 1006,
+                      title: "Fearless Public Speaking Club",
+                      description:
+                        "Club Fearless seeks to help students boost their self-confidence and public speaking skills with weekly debates and public speaking training sessions happening frequently throughout the year. The club celebrates all possible art forms which encourage freedom of speech and self-expression.",
+                      location: "Block 19",
+                      availability: 15,
+                      price: "2000",
+                      image: "images/speakingClub.jpeg",
+                    },
+                    {
+                      id: 1007,
+                      title: "Fearless Public Speaking Club",
+                      description:
+                        "Club Fearless seeks to help students boost their self-confidence and public speaking skills with weekly debates and public speaking training sessions happening frequently throughout the year. The club celebrates all possible art forms which encourage freedom of speech and self-expression.",
+                      location: "Block 19",
+                      availability: 15,
+                      price: "2000",
+                      image: "images/speakingClub.jpeg",
+                    },
+                    {
+                      id: 1008,
+                      title: "Fearless Public Speaking Club",
+                      description:
+                        "Club Fearless seeks to help students boost their self-confidence and public speaking skills with weekly debates and public speaking training sessions happening frequently throughout the year. The club celebrates all possible art forms which encourage freedom of speech and self-expression.",
+                      location: "Block 19",
+                      availability: 15,
+                      price: "2000",
+                      image: "images/speakingClub.jpeg",
+                    },
+                    {
+                      id: 1009,
+                      title: "Fearless Public Speaking Club",
+                      description:
+                        "Club Fearless seeks to help students boost their self-confidence and public speaking skills with weekly debates and public speaking training sessions happening frequently throughout the year. The club celebrates all possible art forms which encourage freedom of speech and self-expression.",
+                      location: "Block 19",
+                      availability: 15,
+                      price: "2000",
+                      image: "images/speakingClub.jpeg",
+                    },
+                    {
+                      id: 1010,
+                      title: "Fearless Public Speaking Club",
+                      description:
+                        "Club Fearless seeks to help students boost their self-confidence and public speaking skills with weekly debates and public speaking training sessions happening frequently throughout the year. The club celebrates all possible art forms which encourage freedom of speech and self-expression.",
+                      location: "Block 19",
+                      availability: 15,
+                      price: "2000",
+                      image: "images/speakingClub.jpeg",
+                    },
+                    {
+                      id: 1011,
+                      title: "Fearless Public Speaking Club",
+                      description:
+                        "Club Fearless seeks to help students boost their self-confidence and public speaking skills with weekly debates and public speaking training sessions happening frequently throughout the year. The club celebrates all possible art forms which encourage freedom of speech and self-expression.",
+                      location: "Block 19",
+                      availability: 15,
+                      price: "2000",
+                      image: "images/speakingClub.jpeg",
+                    },
+                    {
+                      id: 1012,
+                      title: "Fearless Public Speaking Club",
+                      description:
+                        "Club Fearless seeks to help students boost their self-confidence and public speaking skills with weekly debates and public speaking training sessions happening frequently throughout the year. The club celebrates all possible art forms which encourage freedom of speech and self-expression.",
+                      location: "Block 19",
+                      availability: 15,
+                      price: "2000",
+                      image: "images/speakingClub.jpeg",
+                    }
+                  ],
+                  cart: []
+                },
+                methods:{
+                    addToCart(club) {
+                      if (!this.cart.includes(club.id)) {
+                        this.cart.push(club.id);
+                        console.log(`Club with ID ${club.id} added to cart.`);
+                      } else {
+                        console.log(`Club with ID ${club.id} is already in the cart.`);
+                      }
+                    }
+                }
+            })
+
+        </script>
+    </body>
+</html>
