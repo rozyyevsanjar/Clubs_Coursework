@@ -28,7 +28,9 @@
                     <p>Price: {{ club.price }}</p>
                     <button v-on:click="addToCart(club)">Add to Cart</button>
                 </div>
+            </main>
         </div>
+            
 
 
         <script type="text/javascript">
@@ -43,7 +45,7 @@
                       description:
                         "Members of the Book Club encourage others to either find or rekindle their love of reading by forming reading groups whereby students can discuss their thoughts and gain new perspectives on both modern and classical literary works.",
                       location: "Block 15",
-                      availability: 30,
+                      availability: 30, 
                       price: "1900",
                       image: "images/bookClub.jpeg",
                     },
@@ -158,18 +160,36 @@
                       image: "images/speakingClub.jpeg",
                     }
                   ],
-                  cart: []
+                  cart: [],
+                  showAddToCartModal: false,
+                  showCheckoutModal: false,
+                  addedClubMessage: "",
                 },
                 methods:{
-                    addToCart(club) {
-                      if (!this.cart.includes(club.id)) {
-                        this.cart.push(club.id);
-                        console.log(`Club with ID ${club.id} added to cart.`);
-                      } else {
-                        console.log(`Club with ID ${club.id} is already in the cart.`);
-                      }
+                  addToCart(club) {
+                    if (!this.cart.find(item => item.id === club.id)) {
+                        this.cart.push(club);
+                        this.addedClubMessage = `${club.title} added to your cart.`;
+                        this.showAddToCartModal = true;
+                    } else {
+                        this.addedClubMessage = `${club.title} is already in your cart.`;
+                        this.showAddToCartModal = true;
                     }
+                },
+                checkout() {
+                    alert("Thank you for your purchase!");
+                    this.cart = [];
+                    this.showCheckoutModal = false;
                 }
+            },
+            computed: {
+                cartDetails() {
+                    return this.cart;
+                },
+                totalPrice() {
+                    return this.cart.reduce((total, item) => total + parseInt(item.price), 0);
+                }
+            }
             })
 
         </script>
