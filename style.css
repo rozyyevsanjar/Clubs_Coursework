@@ -125,29 +125,82 @@ button:hover {
     background-color: #218838;
 }
 .modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7); /* Dark semi-transparent background */
     display: flex;
     justify-content: center;
     align-items: center;
-    position: fixed;
-    z-index: 1;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
 }
+
+/* Modal Content */
 .modal-content {
-    background-color: white;
+    background: #fff;
+    width: 90%;
+    max-width: 500px;
     padding: 20px;
-    border-radius: 5px;
-    width: 50%;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25); /* Subtle shadow */
+    animation: fadeIn 0.3s ease-in-out; /* Fade-in animation */
+    text-align: center;
+    position: relative; /* For close button positioning */
 }
+
+/* Modal Header */
+.modal-content h3 {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+/* Modal Text */
+.modal-content p {
+    font-size: 1em;
+    margin-bottom: 20px;
+    color: #555;
+}
+
+/* Close Button */
 .close {
     position: absolute;
     top: 10px;
-    right: 10px;
-    font-size: 18px;
+    right: 15px;
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #555;
     cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.close:hover {
+    color: #000;
+}
+
+/* Buttons */
+.btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+.btn-primary {
+    background: #007bff;
+    color: #fff;
+}
+
+.btn-primary:hover {
+    background: #0056b3;
+}
+
+/* Add subtle hover effect */
+.btn:hover {
+    background: #f0f0f0;
+    color: #333;
 }

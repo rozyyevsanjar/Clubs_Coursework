@@ -30,20 +30,20 @@
                 </div>
             </main>
 
-            <!--Add to cart modal-->
+           <!-- Add to Cart Modal -->
             <div v-if="showAddToCartModal" class="modal">
               <div class="modal-content">
                   <span class="close" v-on:click="showAddToCartModal = false">&times;</span>
                   <h3>Item Added to Cart</h3>
                   <p>{{ addedClubMessage }}</p>
-                  <button v-on:click="showAddToCartModal = false">Close</button>
+                  <button v-on:click="showAddToCartModal = false" class="btn">Close</button>
               </div>
-          </div>
-  
-          <!-- Checkout Modal -->
-          <div v-if="showCheckoutModal" class="modal">
+            </div>
+
+            <!-- Checkout Modal -->
+            <div v-if="showCheckoutModal" class="modal">
               <div class="modal-content">
-                <span class="close" v-on:click="closeCheckoutModal">&times;</span>
+                  <span class="close" v-on:click="closeCheckoutModal">&times;</span>
                   <h3>Checkout</h3>
                   <ul>
                       <li v-for="item in cartDetails" :key="item.id">
@@ -51,9 +51,9 @@
                       </li>
                   </ul>
                   <p><strong>Total Price:</strong> {{ totalPrice }}</p>
-                  <button v-on:click="checkout">Confirm Checkout</button>
+                  <button v-on:click="checkout" class="btn btn-primary">Confirm Checkout</button>
               </div>
-        </div>
+            </div>
       </div>      
 
 
