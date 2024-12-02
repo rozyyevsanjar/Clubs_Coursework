@@ -14,7 +14,7 @@
                 <h1 v-text="sitename"></h1>
             </header>
             <div class="checkout">
-              <button v-on:click="checkout">Checkout</button>
+              <button v-on:click="openCheckoutModal">Checkout</button>
             </div>
             <main>
                 <div v-for="club in clubs" :key="club.id" class="club">
@@ -29,8 +29,32 @@
                     <button v-on:click="addToCart(club)">Add to Cart</button>
                 </div>
             </main>
+
+            <!--Add to cart modal-->
+            <div v-if="showAddToCartModal" class="modal">
+              <div class="modal-content">
+                  <span class="close" v-on:click="showAddToCartModal = false">&times;</span>
+                  <h3>Item Added to Cart</h3>
+                  <p>{{ addedClubMessage }}</p>
+                  <button v-on:click="showAddToCartModal = false">Close</button>
+              </div>
+          </div>
+  
+          <!-- Checkout Modal -->
+          <div v-if="showCheckoutModal" class="modal">
+              <div class="modal-content">
+                <span class="close" v-on:click="closeCheckoutModal">&times;</span>
+                  <h3>Checkout</h3>
+                  <ul>
+                      <li v-for="item in cartDetails" :key="item.id">
+                          {{ item.title }} - {{ item.price }}
+                      </li>
+                  </ul>
+                  <p><strong>Total Price:</strong> {{ totalPrice }}</p>
+                  <button v-on:click="checkout">Confirm Checkout</button>
+              </div>
         </div>
-            
+      </div>      
 
 
         <script type="text/javascript">
@@ -167,31 +191,37 @@
                 },
                 methods:{
                   addToCart(club) {
-                    if (!this.cart.find(item => item.id === club.id)) {
-                        this.cart.push(club);
-                        this.addedClubMessage = `${club.title} added to your cart.`;
-                        this.showAddToCartModal = true;
-                    } else {
-                        this.addedClubMessage = `${club.title} is already in your cart.`;
-                        this.showAddToCartModal = true;
-                    }
+                      if (!this.cart.find(item => item.id === club.id)) {
+                          this.cart.push(club);
+                          this.addedClubMessage = `${club.title} added to your cart.`;
+                          this.showAddToCartModal = true;
+                      } else {
+                          this.addedClubMessage = `${club.title} is already in your cart.`;
+                          this.showAddToCartModal = true;
+                      }
+                  },
+                  openCheckoutModal() {
+                      this.showCheckoutModal = true;
+                  },
+                  closeCheckoutModal() {
+                      this.showCheckoutModal = false;
+                  },
+                  checkout() {
+                      // Perform checkout logic (e.g., finalize the cart, reset data)
+                      alert("Checkout confirmed!");
+                      this.cart = [];
+                      this.showCheckoutModal = false;
+                  }
                 },
-                checkout() {
-                    alert("Thank you for your purchase!");
-                    this.cart = [];
-                    this.showCheckoutModal = false;
+                computed: {
+                  cartDetails() {
+                      return this.cart;
+                  },
+                  totalPrice() {
+                      return this.cart.reduce((total, item) => total + parseInt(item.price), 0);
+                  }
                 }
-            },
-            computed: {
-                cartDetails() {
-                    return this.cart;
-                },
-                totalPrice() {
-                    return this.cart.reduce((total, item) => total + parseInt(item.price), 0);
-                }
-            }
             })
-
         </script>
     </body>
 </html>
