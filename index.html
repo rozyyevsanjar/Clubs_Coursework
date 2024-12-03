@@ -9,52 +9,67 @@
         <title>Middlesex University Dubai Courses</title>
     </head>
     <body>
-        <div id="app">
-            <header>
-                <h1 v-text="sitename"></h1>
-            </header>
-            <div class="checkout">
-              <button v-on:click="openCheckoutModal">Checkout</button>
+      <div id="app">
+        <header>
+            <h1 v-text="sitename"></h1>
+        </header>
+        <div class="checkout">
+          <!-- Added Cart Icon -->
+          <button v-on:click="openCheckoutModal">
+            <i class="fa fa-shopping-cart"></i> Checkout
+          </button>
+        </div>
+        <main>
+            <div v-for="club in clubs" :key="club.id" class="club">
+                <figure>
+                  <img :src="club.image" :alt="club.title" />
+                </figure>
+                <h2 v-text="club.title"></h2>
+                <p v-text="club.description"></p>
+                <p>
+                  <i class="fa fa-map-marker"></i> Location: {{ club.location }}
+                </p>
+                <p>
+                  <i class="fa fa-users"></i> Availability: {{ club.availability }}
+                </p>
+                <p>
+                  <i class="fa fa-tag"></i> Price: {{ club.price }}
+                </p>
+                <button v-on:click="addToCart(club)">
+                  <i class="fa fa-cart-plus"></i> Add to Cart
+                </button>
             </div>
-            <main>
-                <div v-for="club in clubs" :key="club.id" class="club">
-                    <figure>
-                      <img :src="club.image" :alt="club.title" />
-                    </figure>
-                    <h2 v-text="club.title"></h2>
-                    <p v-text="club.description"></p>
-                    <p>Location: {{ club.location }}</p>
-                    <p>Availability: {{ club.availability }}</p>
-                    <p>Price: {{ club.price }}</p>
-                    <button v-on:click="addToCart(club)">Add to Cart</button>
-                </div>
-            </main>
+        </main>
 
-           <!-- Add to Cart Modal -->
-            <div v-if="showAddToCartModal" class="modal">
-              <div class="modal-content">
-                  <span class="close" v-on:click="showAddToCartModal = false">&times;</span>
-                  <h3>Item Added to Cart</h3>
-                  <p>{{ addedClubMessage }}</p>
-                  <button v-on:click="showAddToCartModal = false" class="btn">Close</button>
-              </div>
-            </div>
+        <!-- Add to Cart Modal -->
+        <div v-if="showAddToCartModal" class="modal">
+          <div class="modal-content">
+              <span class="close" v-on:click="showAddToCartModal = false">&times;</span>
+              <h3><i class="fa fa-check-circle"></i> Item Added to Cart</h3>
+              <p>{{ addedClubMessage }}</p>
+              <button v-on:click="showAddToCartModal = false" class="btn">
+                <i class="fa fa-close"></i> Close
+              </button>
+          </div>
+        </div>
 
-            <!-- Checkout Modal -->
-            <div v-if="showCheckoutModal" class="modal">
-              <div class="modal-content">
-                  <span class="close" v-on:click="closeCheckoutModal">&times;</span>
-                  <h3>Checkout</h3>
-                  <ul>
-                      <li v-for="item in cartDetails" :key="item.id">
-                          {{ item.title }} - {{ item.price }}
-                      </li>
-                  </ul>
-                  <p><strong>Total Price:</strong> {{ totalPrice }}</p>
-                  <button v-on:click="checkout" class="btn btn-primary">Confirm Checkout</button>
-              </div>
-            </div>
-      </div>      
+        <!-- Checkout Modal -->
+        <div v-if="showCheckoutModal" class="modal">
+          <div class="modal-content">
+              <span class="close" v-on:click="closeCheckoutModal">&times;</span>
+              <h3><i class="fa fa-shopping-bag"></i> Checkout</h3>
+              <ul>
+                  <li v-for="item in cartDetails" :key="item.id">
+                      {{ item.title }} - {{ item.price }}
+                  </li>
+              </ul>
+              <p><strong>Total Price:</strong> {{ totalPrice }}</p>
+              <button v-on:click="checkout" class="btn btn-primary">
+                <i class="fa fa-check"></i> Confirm Checkout
+              </button>
+          </div>
+        </div>
+    </div>       
 
 
         <script type="text/javascript">
