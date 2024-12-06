@@ -204,3 +204,15 @@ button:hover {
     background: #f0f0f0;
     color: #333;
 }
+.btn-delete {
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 3px;
+}
+
+.btn-delete:hover {
+    background-color: #ff1a1a;
+}
