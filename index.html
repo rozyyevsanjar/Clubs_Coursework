@@ -11,15 +11,27 @@
     <body>
       <div id="app">
         <header>
-            <h1 v-text="sitename"></h1>
-        </header>
+          <h1 v-text="sitename"></h1>
+          <div class="search-bar">
+              <input
+                  type="text"
+                  placeholder="Search clubs..."
+                  v-model="searchQuery"
+                  class="search-input"
+              />
+              <button class="search-button">
+                  <i class="fa fa-search"></i>
+              </button>
+          </div>
+      </header>
+      
         <div class="checkout">
           <button v-on:click="openCheckoutModal">
             <i class="fa fa-shopping-cart"></i> Checkout
           </button>
         </div>
         <main>
-            <div v-for="club in clubs" :key="club.id" class="club">
+            <div v-for="club in filteredClubs" :key="club.id" class="club">
                 <figure>
                   <img :src="club.image" :alt="club.title" />
                 </figure>
@@ -60,6 +72,7 @@
               <ul>
                   <li v-for="item in cartDetails" :key="item.id">
                       {{ item.title }} - {{ item.price }}
+                      <span>(Available: {{item.availability}})</span>
                       <button v-on:click="removeFromCart(item)" class="btn-delete">
                         <i class="fa fa-trash"></i> Remove
                   </li>
@@ -83,6 +96,7 @@
                   showAddToCartModal: false,
                   showCheckoutModal: false,
                   addedClubMessage: "",
+                  searchQuery: "",  
                 },
                 methods:{
                   addToCart(club) {
@@ -102,10 +116,32 @@
                       this.showCheckoutModal = false;
                   },
                   checkout() {
-                      // Perform checkout logic (e.g., finalize the cart, reset data)
+                    const updatePromises = this.cart.map(async (club) => {
+                      try {
+                        const response = await fetch(`http://localhost:5001/clubs/${club.id}`, {
+                          method: "PUT",
+                          headers: {
+                            "Content-Type": "application/json",
+                          },
+                          body: JSON.stringify({ decrementBy: 1 }), // Decrease availability by 1
+                        });
+
+                        if (!response.ok) {
+                          throw new Error("Failed to update availability");
+                        }
+                        
+                        const updatedClub = await response.json();
+                        club.availability = updatedClub.availability; // Update local cart with new availability
+                      } catch (error) {
+                        console.error(`Error updating club ${club.id}:`, error);
+                      }
+                    });
+
+                    Promise.all(updatePromises).then(() => {
                       alert("Checkout confirmed!");
-                      this.cart = [];
-                      this.showCheckoutModal = false;
+                      this.cart = []; // Clear the cart after checkout
+                      this.showCheckoutModal = false; // Close the modal
+                    });
                   },
                   removeFromCart(item) {
                       this.cart = this.cart.filter(cartItem => cartItem.id !== item.id);
@@ -134,7 +170,16 @@
                   },
                   totalPrice() {
                       return this.cart.reduce((total, item) => total + parseInt(item.price), 0);
-                  }
+                  },
+                  filteredClubs() {
+                      if (!this.searchQuery) {
+                          return this.clubs;
+                      }
+                      const query = this.searchQuery.toLowerCase();
+                      return this.clubs.filter((club) =>
+                          club.title.toLowerCase().includes(query)
+                      );
+                  },
                 }
             })
         </script>

@@ -56,8 +56,20 @@ async function startServer() {
         console.error(err);
       }
     });
-    
-
+    app.delete("/clubs/:id", async (req, res) => {
+      try {
+        const clubId = req.params.id; // Get the `id` from the URL
+        const result = await db.collection("clubs").deleteOne({ id: clubId }); // Match based on `id`
+        
+        if (result.deletedCount === 0) {
+          res.status(404).json({ message: "Club not found" });
+        } else {
+          res.status(200).json({ message: "Club deleted successfully" });
+        }
+      } catch (err) {
+        res.status(500).json({ message: "Error deleting club", error: err });
+      }
+    }); 
     const PORT = 5001;
     app.listen(PORT, () => {
       console.log(`Server running on http://localhost:${PORT}`);
@@ -66,5 +78,27 @@ async function startServer() {
     console.error("Failed to connect to MongoDB Atlas", err);
   }
 }
+app.put("/clubs/:id", async (req, res) => {
+  try {
+    const clubId = req.params.id; // Club ID to update
+    const { decrementBy } = req.body; // Amount to decrease availability
+
+    // Update the club's availability
+    const result = await db.collection("clubs").findOneAndUpdate(
+      { id: parseInt(clubId) }, // Find by custom `id`
+      { $inc: { availability: -decrementBy } }, // Decrease availability
+      { returnDocument: "after" } // Return the updated document
+    );
+
+    if (!result.value) {
+      res.status(404).json({ message: "Club not found" });
+    } else {
+      res.status(200).json(result.value); // Send updated club data
+    }
+  } catch (err) {
+    res.status(500).json({ message: "Error updating club availability", error: err });
+    console.error(err);
+  }
+});
 
 startServer();
