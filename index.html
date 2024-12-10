@@ -102,7 +102,6 @@
                     id="name"
                     v-model="userName"
                     placeholder="Enter your name"
-                    @blur="validateName"
                     required
                 />
                 <span v-if="nameError" class="error-message">{{ nameError }}</span>
