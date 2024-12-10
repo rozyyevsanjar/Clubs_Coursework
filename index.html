@@ -24,14 +24,31 @@
               </button>
           </div>
       </header>
+      <div class="sorting">
+        <div class="sort-dropdown">
+          <label for="sort-options">Sort by:</label>
+          <select id="sort-options" v-model="sortOption" @change="sortClubs">
+              <option value="price">Price</option>
+              <option value="availability">Availability</option>
+              <option value="title">Title</option>
+              <option value="location">Location</option>
+          </select>
+        </div>
       
+        <div class="sort-bar">
+          <button v-on:click="toggleSortOrder" class="sort-order-btn">
+              <i class="fa" :class="sortOrder === 'asc' ? 'fa-arrow-up' : 'fa-arrow-down'"></i>
+              {{ sortOrder === 'asc' ? 'Sort Ascending' : 'Sort Descending' }}
+          </button>
+      </div>      
+    </div>
         <div class="checkout">
           <button v-on:click="openCheckoutModal">
             <i class="fa fa-shopping-cart"></i> Checkout
           </button>
         </div>
         <main>
-            <div v-for="club in filteredClubs" :key="club.id" class="club">
+            <div v-for="club in sortedClubs" :key="club.id" class="club">
                 <figure>
                   <img :src="club.image" :alt="club.title" />
                 </figure>
@@ -97,6 +114,8 @@
                   showCheckoutModal: false,
                   addedClubMessage: "",
                   searchQuery: "",  
+                  sortOption: "title", // Default sorting option
+                  sortOrder: "asc",    // Default sorting order (ascending)
                 },
                 methods:{
                   addToCart(club) {
@@ -108,6 +127,9 @@
                           this.addedClubMessage = `${club.title} is already in your cart.`;
                           this.showAddToCartModal = true;
                       }
+                  },
+                  toggleSortOrder() {
+                      this.sortOrder = this.sortOrder === "asc" ? "desc" : "asc";
                   },
                   openCheckoutModal() {
                       this.showCheckoutModal = true;
@@ -179,6 +201,22 @@
                       return this.clubs.filter((club) =>
                           club.title.toLowerCase().includes(query)
                       );
+                  },
+                  sortedClubs() {
+                      const sorted = [...this.filteredClubs];
+                      sorted.sort((a, b) => {
+                          if (this.sortOption === "price" || this.sortOption === "availability") {
+                              return this.sortOrder === "asc"
+                                  ? a[this.sortOption] - b[this.sortOption]
+                                  : b[this.sortOption] - a[this.sortOption];
+                          }
+                          if (this.sortOption === "title") {
+                              return this.sortOrder === "asc"
+                                  ? a.title.localeCompare(b.title)
+                                  : b.title.localeCompare(a.title);
+                          }
+                      });
+                      return sorted;
                   },
                 }
             })
