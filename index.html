@@ -27,7 +27,7 @@
       <div class="sorting">
         <div class="sort-dropdown">
           <label for="sort-options">Sort by:</label>
-          <select id="sort-options" v-model="sortOption" @change="sortClubs">
+          <select id="sort-options" v-model="sortOption">
               <option value="price">Price</option>
               <option value="availability">Availability</option>
               <option value="title">Title</option>
@@ -63,7 +63,7 @@
                 <p>
                   <i class="fa fa-tag"></i> Price: {{ club.price }}
                 </p>
-                <button v-on:click="addToCart(club)">
+                <button v-on:click="addToCart(club)" :disabled="club.availability === 0">
                   <i class="fa fa-cart-plus"></i> Add to Cart
                 </button>
             </div>
@@ -95,7 +95,31 @@
                   </li>
               </ul>
               <p><strong>Total Price:</strong> {{ totalPrice }}</p>
-              <button v-on:click="checkout" class="btn btn-primary">
+              <div class="user-details">
+                <label for="name">Name:</label>
+                <input
+                    type="text"
+                    id="name"
+                    v-model="userName"
+                    placeholder="Enter your name"
+                    @blur="validateName"
+                    required
+                />
+                <span v-if="nameError" class="error-message">{{ nameError }}</span>
+      
+                <label for="phone">Phone Number:</label>
+                <input
+                    type="tel"
+                    id="phone"
+                    v-model="userPhone"
+                    placeholder="Enter your phone number"
+                    @blur="validatePhone"
+                    required
+                />
+                <span v-if="phoneError" class="error-message">{{ phoneError }}</span>
+            </div>
+      
+              <button v-on:click="checkout" class="btn btn-primary" :disabled="!isCheckoutEnabled">
                 <i class="fa fa-check"></i> Confirm Checkout
               </button>
           </div>
@@ -114,10 +138,29 @@
                   showCheckoutModal: false,
                   addedClubMessage: "",
                   searchQuery: "",  
-                  sortOption: "title", // Default sorting option
-                  sortOrder: "asc",    // Default sorting order (ascending)
+                  sortOption: "title", 
+                  sortOrder: "asc",
+                  userName: "",
+                  userPhone: "",
+                  phoneError: " "
                 },
                 methods:{
+                  validatePhone() {
+                      const phoneRegex = /^\+?(\d{1,3})?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})$/;
+                      if (!phoneRegex.test(this.userPhone)) {
+                          this.phoneError = "Please enter a valid phone number.";
+                      } else {
+                          this.phoneError = ""; // Clear the error if the phone number is valid
+                      }
+                  },
+                  validateName() {
+                      const nameRegex = /^[A-Za-z\s]+$/; // Only letters and spaces are allowed
+                      if (!nameRegex.test(this.userName.trim())) {
+                          this.nameError = "Name should only contain letters.";
+                      } else {
+                          this.nameError = ""; // Clear the error if valid
+                      }
+                  },
                   addToCart(club) {
                       if (!this.cart.find(item => item.id === club.id)) {
                           this.cart.push(club);
@@ -138,6 +181,11 @@
                       this.showCheckoutModal = false;
                   },
                   checkout() {
+                    if (!this.userName || !this.userPhone) {
+                        alert("Please provide your name and phone number before checking out.");
+                        return;
+                    }
+
                     const updatePromises = this.cart.map(async (club) => {
                       try {
                         const response = await fetch(`http://localhost:5001/clubs/${club.id}`, {
@@ -151,7 +199,7 @@
                         if (!response.ok) {
                           throw new Error("Failed to update availability");
                         }
-                        
+
                         const updatedClub = await response.json();
                         club.availability = updatedClub.availability; // Update local cart with new availability
                       } catch (error) {
@@ -160,8 +208,10 @@
                     });
 
                     Promise.all(updatePromises).then(() => {
-                      alert("Checkout confirmed!");
+                      alert(`Checkout confirmed! Thank you, ${this.userName}. We will contact you at ${this.userPhone}.`);
                       this.cart = []; // Clear the cart after checkout
+                      this.userName = ""; // Clear the name field
+                      this.userPhone = ""; // Clear the phone field
                       this.showCheckoutModal = false; // Close the modal
                     });
                   },
@@ -218,6 +268,17 @@
                       });
                       return sorted;
                   },
+                  isCheckoutEnabled() {
+                      // Ensure the name is not empty and matches the regex
+                      const nameRegex = /^[A-Za-z\s]+$/;
+                      const isNameValid = this.userName.trim().length > 0 && nameRegex.test(this.userName.trim());
+
+                      // Check if the phone number matches the regex
+                      const phoneRegex = /^\+?(\d{1,3})?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})$/;
+                      const isPhoneValid = phoneRegex.test(this.userPhone);
+
+                      return isNameValid && isPhoneValid;
+                  }
                 }
             })
         </script>
