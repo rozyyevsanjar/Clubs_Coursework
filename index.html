@@ -43,8 +43,10 @@
       </div>      
     </div>
         <div class="checkout">
-          <button v-on:click="openCheckoutModal">
-            <i class="fa fa-shopping-cart"></i> Checkout
+          <button v-on:click="openCheckoutModal"
+          :disabled="cart.length === 0" 
+          class="btn btn-primary">
+            <i class="fa fa-shopping-cart"></i> View Cart
           </button>
         </div>
         <main>
@@ -102,10 +104,10 @@
                     id="name"
                     v-model="userName"
                     placeholder="Enter your name"
+                    @blur="validateName"
                     required
                 />
                 <span v-if="nameError" class="error-message">{{ nameError }}</span>
-      
                 <label for="phone">Phone Number:</label>
                 <input
                     type="tel"
@@ -268,16 +270,16 @@
                       return sorted;
                   },
                   isCheckoutEnabled() {
-                      // Ensure the name is not empty and matches the regex
-                      const nameRegex = /^[A-Za-z\s]+$/;
-                      const isNameValid = this.userName.trim().length > 0 && nameRegex.test(this.userName.trim());
+                    // Ensure the name is not empty and matches the regex
+                    const nameRegex = /^[A-Za-z\s]+$/;
+                    const isNameValid = this.userName.trim().length > 0 && nameRegex.test(this.userName.trim());
 
-                      // Check if the phone number matches the regex
-                      const phoneRegex = /^\+?(\d{1,3})?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})$/;
-                      const isPhoneValid = phoneRegex.test(this.userPhone);
+                    // Check if the phone number matches the regex
+                    const phoneRegex = /^\+?(\d{1,3})?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})$/;
+                    const isPhoneValid = phoneRegex.test(this.userPhone);
 
-                      return isNameValid && isPhoneValid;
-                  }
+                    return isNameValid && isPhoneValid;
+                }
                 }
             })
         </script>
