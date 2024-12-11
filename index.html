@@ -248,9 +248,15 @@
                           return this.clubs;
                       }
                       const query = this.searchQuery.toLowerCase();
-                      return this.clubs.filter((club) =>
-                          club.title.toLowerCase().includes(query)
-                      );
+                      return this.clubs.filter((club) => {
+                          return (
+                              club.title.toLowerCase().includes(query) ||
+                              club.description.toLowerCase().includes(query) ||
+                              club.location.toLowerCase().includes(query) ||
+                              club.price.toString().toLowerCase().includes(query) ||
+                              club.availability.toString().toLowerCase().includes(query)
+                          );
+                      });
                   },
                   sortedClubs() {
                       const sorted = [...this.filteredClubs];
