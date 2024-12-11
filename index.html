@@ -187,7 +187,7 @@
                       return;
                     }
 
-                    fetch('http://localhost:5001/orders', {
+                    fetch('https://clubs-server-1.onrender.com/orders', {
                       method: "POST",
                       headers: {
                         "Content-Type": "application/json",
@@ -221,7 +221,7 @@
                   },
                   async fetchClubs(){
                     try{
-                      const response = await fetch('http://localhost:5001/clubs')
+                      const response = await fetch('https://clubs-server-1.onrender.com/clubs')
                       const data = await response.json();
                       this.clubs = data;
                       console.log("fetched clubs:", data);
