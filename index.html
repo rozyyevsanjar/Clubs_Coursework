@@ -183,38 +183,38 @@
                   },
                   checkout() {
                     if (!this.userName || !this.userPhone) {
-                        alert("Please provide your name and phone number before checking out.");
-                        return;
+                      alert("Please provide your name and phone number before checking out.");
+                      return;
                     }
 
-                    const updatePromises = this.cart.map(async (club) => {
-                      try {
-                        const response = await fetch(`http://localhost:5001/clubs/${club.id}`, {
-                          method: "PUT",
-                          headers: {
-                            "Content-Type": "application/json",
-                          },
-                          body: JSON.stringify({ decrementBy: 1 }), // Decrease availability by 1
-                        });
-
+                    fetch('http://localhost:5001/orders', {
+                      method: "POST",
+                      headers: {
+                        "Content-Type": "application/json",
+                      },
+                      body: JSON.stringify({
+                        userName: this.userName,
+                        userPhone: this.userPhone,
+                        cart: this.cart,
+                      }),
+                    })
+                      .then(response => {
                         if (!response.ok) {
-                          throw new Error("Failed to update availability");
+                          throw new Error("Failed to place order");
                         }
-
-                        const updatedClub = await response.json();
-                        club.availability = updatedClub.availability; // Update local cart with new availability
-                      } catch (error) {
-                        console.error(`Error updating club ${club.id}:`, error);
-                      }
-                    });
-
-                    Promise.all(updatePromises).then(() => {
-                      alert(`Checkout confirmed! Thank you, ${this.userName}. We will contact you at ${this.userPhone}.`);
-                      this.cart = []; // Clear the cart after checkout
-                      this.userName = ""; // Clear the name field
-                      this.userPhone = ""; // Clear the phone field
-                      this.showCheckoutModal = false; // Close the modal
-                    });
+                        return response.json();
+                      })
+                      .then(data => {
+                        alert(`Order placed successfully! Your Order ID: ${data.orderId}`);
+                        this.cart = [];
+                        this.userName = "";
+                        this.userPhone = "";
+                        this.showCheckoutModal = false;
+                      })
+                      .catch(error => {
+                        console.error("Error placing order:", error);
+                        alert("Failed to place order. Please try again.");
+                      });
                   },
                   removeFromCart(item) {
                       this.cart = this.cart.filter(cartItem => cartItem.id !== item.id);
@@ -232,7 +232,6 @@
                     }
                     
                     },
-          
                 },
                 created: function(){
                   this.fetchClubs();
